@@ -81,21 +81,6 @@ def handle(tornadoRequest):
 				log.info("Account {} verified successfully!".format(userID))
 				glob.verifiedCache[str(userID)] = 1
 				firstLogin = True
-			else:
-				# Multiaccount detected
-				log.info("Account {} NOT verified!".format(userID))
-				glob.verifiedCache[str(userID)] = 0
-				raise exceptions.loginBannedException()
-
-
-		# Save HWID in db for multiaccount detection
-		hwAllowed = userUtils.logHardware(userID, clientData, firstLogin)
-
-		# This is false only if HWID is empty
-		# if HWID is banned, we get restricted so there's no
-		# need to deny bancho access
-		if not hwAllowed:
-			raise exceptions.haxException()
 
 		# Log user IP
 		userUtils.logIP(userID, requestIP)

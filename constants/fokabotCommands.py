@@ -25,7 +25,7 @@ def bloodcatMessage(beatmapID):
 	beatmap = glob.db.fetch("SELECT song_name, beatmapset_id FROM beatmaps WHERE beatmap_id = %s LIMIT 1", [beatmapID])
 	if beatmap is None:
 		return "Sorry, I'm not able to provide a download link for this map :("
-	return "Download [https://bloodcat.com/osu/s/{} {}] from Bloodcat".format(
+	return "Download Link: [https://old.ppy.sh/s/{} {}]".format(
 		beatmap["beatmapset_id"],
 		beatmap["song_name"],
 	)
@@ -435,16 +435,16 @@ def getPPMessage(userID, just_data = False):
 			msg += "95%: {pp95}pp | 98%: {pp98}pp | 99% {pp99}pp | 100%: {pp100}pp".format(pp100=data["pp"][0], pp99=data["pp"][1], pp98=data["pp"][2], pp95=data["pp"][3])
 		else:
 			msg += "{acc:.2f}%: {pp}pp".format(acc=token.tillerino[2], pp=data["pp"][0])
-		
+
 		originalAR = data["ar"]
 		# calc new AR if HR/EZ is on
 		if (currentMods & mods.EASY) > 0:
 			data["ar"] = max(0, data["ar"] / 2)
 		if (currentMods & mods.HARDROCK) > 0:
 			data["ar"] = min(10, data["ar"] * 1.4)
-		
+
 		arstr = " ({})".format(originalAR) if originalAR != data["ar"] else ""
-		
+
 		# Beatmap info
 		msg += " | {bpm} BPM | AR {ar}{arstr} | {stars:.2f} stars".format(bpm=data["bpm"], stars=data["stars"], ar=data["ar"], arstr=arstr)
 
@@ -921,10 +921,6 @@ def multiplayer(fro, chan, message):
 				if force:
 					_match.toggleSlotReady(i)
 
-		if someoneNotReady and not force:
-			return "Some users aren't ready yet. Use '!mp start force' if you want to start the match, " \
-				   "even with non-ready players."
-
 		if startTime == 0:
 			_start()
 			return "Starting match"
@@ -1372,6 +1368,12 @@ commands = [
 		"callback": rtx
 	}, {
 		"trigger": "!bloodcat",
+		"callback": bloodcat
+	}, {
+		"trigger": "!dl",
+		"callback": bloodcat
+	}, {
+		"trigger": "!download",
 		"callback": bloodcat
 	}
 	#
